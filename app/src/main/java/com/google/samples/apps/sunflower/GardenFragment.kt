@@ -36,7 +36,7 @@ class GardenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentGardenBinding.inflate(inflater, container, false)
-        val adapter = GardenPlantingAdapter(binding.root.context)
+        val adapter = GardenPlantingAdapter()
         binding.gardenList.adapter = adapter
         subscribeUi(adapter, binding)
         return binding.root
@@ -48,11 +48,11 @@ class GardenFragment : Fragment() {
                 .get(GardenPlantingListViewModel::class.java)
 
         viewModel.gardenPlantings.observe(viewLifecycleOwner, Observer { plantings ->
-            binding.hasPlantings = (plantings != null && plantings.isNotEmpty())
+            binding.hasPlantings = !plantings.isNullOrEmpty()
         })
 
         viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner, Observer { result ->
-            if (result != null && result.isNotEmpty())
+            if (!result.isNullOrEmpty())
                 adapter.submitList(result)
         })
     }
